@@ -2,17 +2,35 @@
 let amigos = []
 let contador = 1; // Inicializamos un contador
 
-function asignarTextoElemento(elemento, texto) {
+//function asignarTextoElemento(elemento, texto) {
+//    let elementoHTML = document.querySelector(elemento);
+//    elementoHTML.innerHTML = texto;
+//    return;
+//}
+
+
+function asignarTextoElemento(elemento, texto, color) {
     let elementoHTML = document.querySelector(elemento);
     elementoHTML.innerHTML = texto;
+    elementoHTML.style.color = color; // Usa el parámetro "color" para definir el color del texto
     return;
 }
+
+
+
+function asignarTextoElementoLISTA(lista, texto) {
+    let elementoHTML = document.createElement("li"); // Crear un <li> por cada elemento
+    elementoHTML.textContent = texto; // Asignar el texto al <li>
+    lista.appendChild(elementoHTML); // Agregar el <li> a la lista
+}
+
+
 
 function agregarAmigo() {
    // let numeroDeUsuario = parseInt(document.getElementById('valorUsuario').value);
 
    
-   ingresoAmigos = (document.getElementById('amigo').value);
+   let ingresoAmigos = (document.getElementById('amigo').value);
 
    if (ingresoAmigos === ""  ) {
       alert("Debe Ingresar Nombre Valido!!!")
@@ -22,9 +40,10 @@ function agregarAmigo() {
                 alert("Ese Amigo ya esta Registrado!!!") 
       }    else{
                 amigos.push(ingresoAmigos);
-                alert("Amigo Registrado") 
-                asignarTextoElemento('p','Ya se sortearon todos los números posibles');
-                CambiarTextoBoton()
+                //alert("Amigo Registrado") 
+                document.querySelector('#amigo').value = '';
+                CambiarTextoBoton();
+                CargaLista(amigos);
                }
     
    }
@@ -34,20 +53,60 @@ function agregarAmigo() {
 
 
 function CambiarTextoBoton() {
-    // Cambiamos el texto del botón
-    const boton = document.querySelector('.button-draw');
-    boton.textContent = `Sortear amigo secreto ${contador}`;
+   const boton = document.querySelector('.button-draw');
     
-    // Incrementamos el contador para la próxima vez
+// Texto dinámico
+    const texto = contador === 1 ? "va:" : "van:";
+    boton.textContent = `Sortear amigo secreto (${texto}) ${contador} `;
+
+// Incrementar el contador
     contador++;
-    
-    // Aquí puedes agregar la lógica para el sorteo
+
     console.log("Sorteando amigo secreto...");
+
+}
+
+
+
+
+function CargaLista(array) {
+   //Borro Lista HTML
+    const listaAmigos = document.getElementById("listaAmigos");
+    listaAmigos.innerHTML = ""; // Elimina todo el contenido
+    //Cargo Lista HTML
+    for (let i = 0; i < array.length; i++) {
+              
+        asignarTextoElementoLISTA(listaAmigos, array[i]);
+        
+        console.log(array[i]);
+    }
+    
+    
+}
+
+
+function sortearAmigo() {
+    if (amigos.length < 3) {
+        alert("Para Sortear deben ser Minimo 3 Personas!!!")
+    } else {
+        
+        let numeroGenerado =  Math.floor(Math.random()*amigos.length);
+        console.log(numeroGenerado);
+
+        asignarTextoElemento("ul",amigos[numeroGenerado],"green")
+        
+
+
+
+    }
+
+
+
 }
 
 
 
 
 
-
 agregarAmigo()
+sortearAmigo()
